@@ -1,10 +1,11 @@
 ---
-# Task for group 1
 - name: Install packages for specific group
   hosts: all
 
   tasks:
-  - name: Install apache2 & mysql-server
+  
+  # Section : Install packages  
+  - name: Install apache2 & mysql-server for G1
     ansible.builtin.apt:
       update_cache: true
       name: "{{ item }}"
@@ -13,10 +14,10 @@
       - apache2
       - mysql-server
     when: 
-      - ansible_os_family == "Debian"
+      - ansible_facts["os_family"] == "Debian"
       - inventory_hostname in groups['group-g1']
 
-  - name: Install git & nginx & cowsay
+  - name: Install git & nginx & cowsay got G2
     ansible.builtin.apt:
       update_cache: true
       name: "{{ item }}"
@@ -26,5 +27,20 @@
       - nginx
       - cowsay
     when: 
-      - ansible_os_family == "Debian"
+      - ansible_facts["os_family"] == "Debian"
       - inventory_hostname in groups['group-g2']
+
+  # Section : Copy template   
+  - name: Gather the package facts
+    ansible.builtin.package_facts:
+      manager: auto
+
+  - name: Copy HTML from Template
+    ansible.builtin.template:
+      src: templates/html_template.j2
+      dest: /var/www/html/index.html
+    when: "'apache2' in ansible_facts.packages or 'nginx' in ansible_facts.packages"
+
+
+  # Section Jour... 
+   

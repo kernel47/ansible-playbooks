@@ -14,7 +14,6 @@
       - mysql-server
     when: ansible_os_family == "Debian"
 
-
 # Task for group 2 
 - name: Install packages for group G1
   hosts: group-g2
