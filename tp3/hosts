@@ -1,0 +1,9 @@
+[group-g1]
+10.0.0.81
+10.0.0.94
+
+[group-g2]
+10.0.0.108
+
+[all:vars]
+ansible_user=root

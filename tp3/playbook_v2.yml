@@ -1,0 +1,30 @@
+---
+# Task for group 1
+- name: Install packages for specific group
+  hosts: all
+
+  tasks:
+  - name: Install apache2 & mysql-server
+    ansible.builtin.apt:
+      update_cache: true
+      name: "{{ item }}"
+      state: present
+    loop:
+      - apache2
+      - mysql-server
+    when: 
+      - ansible_os_family == "Debian"
+      - inventory_hostname in groups['group-g1']
+
+  - name: Install git & nginx & cowsay
+    ansible.builtin.apt:
+      update_cache: true
+      name: "{{ item }}"
+      state: present
+    loop:
+      - git
+      - nginx
+      - cowsay
+    when: 
+      - ansible_os_family == "Debian"
+      - inventory_hostname in groups['group-g2']
