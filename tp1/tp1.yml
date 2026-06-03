@@ -1,0 +1,10 @@
+---
+- name: Install Apache and configure web page
+  hosts: all
+
+  tasks:
+    - name: Install apache2
+      ansible.builtin.apt:
+         name: apache2
+         update_cache: yes
+         state: present

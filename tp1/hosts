@@ -1,0 +1,7 @@
+[all]
+10.0.0.81
+10.0.0.94
+10.0.0.108
+
+[all:vars]
+ansible_user=root
