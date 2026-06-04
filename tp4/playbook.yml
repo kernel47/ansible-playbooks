@@ -1,0 +1,6 @@
+---
+- name: Install packages for specific group
+  hosts: all
+
+  roles:
+    - geerlingguy.docker
