@@ -2,49 +2,41 @@
 - name: Install apache2 & mysql-server
   hosts: all
 
-
   tasks:
-  - name: Install required packages for debian dist
-    ansible.builtin.apt:
-      update_cache: true
-      name: "{{ item }}"
-      state: present
-    loop:
-      - apache2
-      - mysql-server
-    when: ansible_os_family == "Debian"
+    - name: Install required packages for debian dist
+      ansible.builtin.apt:
+        update_cache: true
+        name: "{{ item }}"
+        state: present
+      loop:
+        - apache2
+        - mysql-server
+      when: ansible_os_family == "Debian"
 
-
-  - name: Install required packages for redhat dist
-    ansible.builtin.yum:
-      update_cache: true
-      name: "{{ item }}"
-      state: present
-    loop:
-      - httpd
-      - mysql-server
-    when: ansible_os_family == "Redhat"
+    - name: Install required packages for redhat dist
+      ansible.builtin.dnf:
+        update_cache: true
+        name: "{{ item }}"
+        state: present
+      loop:
+        - httpd
+        - mysql-server
+      when: ansible_os_family == "Redhat"
     # when: ansible_facts.distribution = "Debian"
     # when: ansible_facts.distribution = "Ubuntu"
     # when: ansible_facts.distribution = "Redhat"
 
+    - name: Gather the package facts
+      ansible.builtin.package_facts:
+        manager: auto
 
-  - name: Gather the package facts
-    ansible.builtin.package_facts:
-      manager: auto
+    - name: Print the package facts
+      ansible.builtin.debug:
+        var: ansible_facts.packages
 
-
-  - name: Print the package facts
-    ansible.builtin.debug:
-      var: ansible_facts.packages
-
-
-  - name: Create html page if apache installed
-    ansible.builtin.copy:
-      content: "Welcome to ansible"
-      dest: /var/www/html/index.html
-      mode: '0644'
-    when: "'apache2' in ansible_facts.packages"
-    
-
-
+    - name: Create html page if apache installed
+      ansible.builtin.copy:
+        content: "Welcome to ansible"
+        dest: /var/www/html/index.html
+        mode: "0644"
+      when: "'apache2' in ansible_facts.packages"

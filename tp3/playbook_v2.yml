@@ -3,60 +3,59 @@
   hosts: all
 
   tasks:
-  
-  # Section : Install packages  
-  - name: Install apache2 & mysql-server for G1
-    ansible.builtin.apt:
-      update_cache: true
-      name: "{{ item }}"
-      state: present
-    loop:
-      - apache2
-      - mysql-server
-    when: 
-      - ansible_facts["os_family"] == "Debian"
-      - inventory_hostname in groups['group-g1']
+    # Section : Install packages
+    - name: Install apache2 & mysql-server for G1
+      ansible.builtin.apt:
+        update_cache: true
+        name: "{{ item }}"
+        state: present
+      loop:
+        - apache2
+        - mysql-server
+      when:
+        - ansible_facts["os_family"] == "Debian"
+        - inventory_hostname in groups['group-g1']
 
-  - name: Install git & nginx & cowsay got G2
-    ansible.builtin.apt:
-      update_cache: true
-      name: "{{ item }}"
-      state: present
-    loop:
-      - git
-      - nginx
-      - cowsay
-    when: 
-      - ansible_facts["os_family"] == "Debian"
-      - inventory_hostname in groups['group-g2']
+    - name: Install git & nginx & cowsay got G2
+      ansible.builtin.apt:
+        update_cache: true
+        name: "{{ item }}"
+        state: present
+      loop:
+        - git
+        - nginx
+        - cowsay
+      when:
+        - ansible_facts["os_family"] == "Debian"
+        - inventory_hostname in groups['group-g2']
 
-  # Section : Copy template   
-  - name: Gather the package facts
-    ansible.builtin.package_facts:
-      manager: auto
+    # Section : Copy template
+    - name: Gather the package facts
+      ansible.builtin.package_facts:
+        manager: auto
 
+    # Section Jour...
+    - name: Get current date
+      ansible.builtin.set_fact:
+        date_time: "{{ ansible_date_time }}"
+        current_day: "{{ ansible_date_time.day | int }}"
+        current_hour: "{{ ansible_date_time.hour | int }}"
 
-  # Section Jour... 
-  - name: Get current date
-    ansible.builtin.set_fact:
-      date_time: "{{ ansible_date_time }}"
-      current_day: "{{ ansible_date_time.day | int }}" 
-      current_hour: "{{ ansible_date_time.hour| int }}"
+    - name: Check if day is even
+      ansible.builtin.set_fact:
+        is_even: "{{ current_day % 2 == 0 }}"
 
-  - name: Check if day is even
-    ansible.builtin.set_fact:
-      is_even: "{{ current_day % 2 == 0 }}"
+    - name: Debug
+      ansible.builtin.debug:
+        msg: "Current Day : {{ current_day }}, Is even {{ is_even }} "
 
-  - name: Debug
-    ansible.builtin.debug:
-      msg: "Current Day : {{ current_day }}, Is even {{ is_even }} "
+    - name: Debug
+      ansible.builtin.debug:
+        msg: "Current Hour : {{ current_hour }}"
 
-  - name: Debug
-    ansible.builtin.debug:
-      msg: "Current Hour : {{ current_hour }}"
-
-  - name: Copy HTML from Template
-    ansible.builtin.template:
-      src: templates/html_template.j2
-      dest: /var/www/html/index.html
-    when: "'apache2' in ansible_facts.packages or 'nginx' in ansible_facts.packages"
+    - name: Copy HTML from Template
+      ansible.builtin.template:
+        src: templates/html_template.j2
+        dest: /var/www/html/index.html
+        mode: "0644"
+      when: "'apache2' in ansible_facts.packages or 'nginx' in ansible_facts.packages"

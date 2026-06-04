@@ -4,28 +4,28 @@
   hosts: group-g1
 
   tasks:
-  - name: Install apache2 & mysql-server
-    ansible.builtin.apt:
-      update_cache: true
-      name: "{{ item }}"
-      state: present
-    loop:
-      - apache2
-      - mysql-server
-    when: ansible_os_family == "Debian"
+    - name: Install apache2 & mysql-server
+      ansible.builtin.apt:
+        update_cache: true
+        name: "{{ item }}"
+        state: present
+      loop:
+        - apache2
+        - mysql-server
+      when: ansible_os_family == "Debian"
 
-# Task for group 2 
+# Task for group 2
 - name: Install packages for group G1
   hosts: group-g2
 
   tasks:
-  - name: Install git & nginx & cowsay
-    ansible.builtin.apt:
-      update_cache: true
-      name: "{{ item }}"
-      state: present
-    loop:
-      - git
-      - nginx
-      - cowsay
-    when: ansible_os_family == "Debian"
+    - name: Install git & nginx & cowsay
+      ansible.builtin.apt:
+        update_cache: true
+        name: "{{ item }}"
+        state: present
+      loop:
+        - git
+        - nginx
+        - cowsay
+      when: ansible_os_family == "Debian"

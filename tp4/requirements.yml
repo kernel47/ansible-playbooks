@@ -3,7 +3,7 @@ roles:
   - name: geerlingguy.docker
     version: 8.0.0
 
-  # alternative 
+  # alternative
   # - name: geerlingguy.docker
   #   version: version or branch name
   #   src: git path or role name
