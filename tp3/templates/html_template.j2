@@ -1,5 +1,9 @@
-<html>
-<body>
-<h1>Bonjour depuis Ansible sur {{ ansible_facts['hostname'] }} </h1>
-</body>
-</html>
+{% if is_even and current_hour > 12 %}
+Jour pair et plus tard que midi
+{% elif is_even and current_hour <= 12  %}
+Jour pair et avant midi
+{% elif not is_even and current_hour > 12  %}
+Jour impair et plus tard que midi
+{% else %}
+Jour impair et avant midi
+{% endif %}

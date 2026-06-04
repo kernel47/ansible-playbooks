@@ -35,12 +35,28 @@
     ansible.builtin.package_facts:
       manager: auto
 
+
+  # Section Jour... 
+  - name: Get current date
+    ansible.builtin.set_fact:
+      date_time: "{{ ansible_date_time }}"
+      current_day: "{{ ansible_date_time.day | int }}" 
+      current_hour: "{{ ansible_date_time.hour| int }}"
+
+  - name: Check if day is even
+    ansible.builtin.set_fact:
+      is_even: "{{ current_day % 2 == 0 }}"
+
+  - name: Debug
+    ansible.builtin.debug:
+      msg: "Current Day : {{ current_day }}, Is even {{ is_even }} "
+
+  - name: Debug
+    ansible.builtin.debug:
+      msg: "Current Hour : {{ current_hour }}"
+
   - name: Copy HTML from Template
     ansible.builtin.template:
       src: templates/html_template.j2
       dest: /var/www/html/index.html
     when: "'apache2' in ansible_facts.packages or 'nginx' in ansible_facts.packages"
-
-
-  # Section Jour... 
-   
